@@ -4,8 +4,8 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // aitHub Pages serve il progetto da https://silvioluca.github.io/aalileo-Logbook/,
+  // GitHub Pages serve il progetto da https://silvioluca.github.io/Galileo-logbook/,
   // non dalla radice: senza questo gli asset (JS/CSS) punterebbero a "/assets/..."
-  // invece di "/aalileo-Logbook/assets/..." e la pagina risulterebbe vuota.
-  base: '/aalileo-Logbook/',
+  // invece di "/Galileo-logbook/assets/..." e la pagina risulterebbe vuota.
+  base: '/Galileo-logbook/',
 })
