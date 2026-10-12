@@ -460,7 +460,7 @@ export default function CreaScheda() {
                         setModaleImportaAperta(true);
                       }}
                     >
-                      Importa scheda esistente
+                      Importa scheda
                     </button>
                   </div>
 
@@ -499,7 +499,7 @@ export default function CreaScheda() {
             <Modal
               open={modaleImportaAperta}
               onClose={() => setModaleImportaAperta(false)}
-              title="Importa scheda esistente"
+              title="Importa scheda"
             >
               <p>Seleziona un file .tex, .txt, .pdf o .docx: titolo, scopo, materiale e procedimento verranno precompilati automaticamente (estrazione automatica, da verificare).</p>
               <input type="file" accept=".tex,.txt,.pdf,.docx" onChange={handleImportaScheda} />
