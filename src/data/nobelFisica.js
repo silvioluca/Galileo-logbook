@@ -1,4 +1,4 @@
-// Albo dei premi Nobel per la Fisica (1901-2025), generato da dati ufficiali
+// Albo dei premi Nobel per la Fisica (1901-2026), generato da dati ufficiali
 // (NobelPrize.org API) incrociati con le motivazioni in italiano di Wikipedia
 // e con l'incipit biografico di Wikipedia in italiano (campo `bioEstesa`).
 // Le immagini sono ritratti reali con un filtro seppia (niente acquaforte:
@@ -2986,12 +2986,25 @@ export const NOBEL_FISICA = [
     nome: 'John M. Martinis',
     nascita: '1958-00-00',
     morte: null,
-    luogoNascita: null,
+    luogoNascita: 'Los Angeles, Stati Uniti',
     luogoMorte: null,
     motivazione: 'per la scoperta dell’effetto tunnel quantistico macroscopico e della quantizzazione dell’energia in un circuito elettrico',
     wikipedia: 'https://en.wikipedia.org/wiki/John_M._Martinis',
     genere: 'male',
     immagine: 'images/nobel/John_M_Martinis.jpg',
     bioEstesa: 'John Matthew Martinis (1958) è un fisico statunitense, professore emerito di fisica presso l\'Università della California - Santa Barbara e premio Nobel per la fisica nel 2025 insieme a John Clarke e Michel Devoret per la scoperta dell\'effetto tunnel quantistico macroscopico e della quantizzazione dell\'energia in un circuito elettrico costituito da superconduttori.',
+  },
+  {
+    anno: 2026,
+    nome: 'Francis Halzen',
+    nascita: '1944-03-23',
+    morte: null,
+    luogoNascita: 'Tienen, Belgium',
+    luogoMorte: null,
+    motivazione: 'per i contributi decisivi all\'Osservatorio di neutrini IceCube e alla scoperta dei neutrini ad alta energia di origine astrofisica',
+    wikipedia: 'https://en.wikipedia.org/wiki/Francis_Halzen',
+    genere: 'male',
+    immagine: 'images/nobel/Francis_Halzen.jpg',
+    bioEstesa: 'Francis Halzen (Tienen, 23 marzo 1944) è un fisico belga naturalizzato statunitense, professore all\'Università del Wisconsin-Madison e unico vincitore del premio Nobel per la fisica nel 2026.\nHa proposto di usare il ghiaccio del Polo Sud come rivelatore di neutrini, le particelle quasi prive di interazioni con la materia che arrivano dal cosmo. Da questa idea, passata per il progetto precursore AMANDA, è nato l\'Osservatorio di neutrini IceCube, che con migliaia di sensori di luce immersi nel ghiaccio glaciale registra il debole lampo prodotto quando un neutrino interagisce con la materia.',
   },
 ];

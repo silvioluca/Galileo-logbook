@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getSchede, deleteScheda } from '../services/schedeService';
 import { getTemplates } from '../services/templatesService';
 import { eliminaFileOriginale } from '../services/fileOriginaleService';
@@ -43,6 +43,8 @@ function raggruppaPerBrancaEEsperienza(schede) {
 
 export default function Schede() {
   const { isOwner } = useAuth();
+  const [parametri] = useSearchParams();
+  const evidenzia = parametri.get('evidenzia');
   const [schede, setSchede] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtri, setFiltri] = useState(FILTRI_INIZIALI);
@@ -147,6 +149,7 @@ export default function Schede() {
                           templateContenuto={contenutoTemplatePer(s)}
                           isOwner={isOwner}
                           onDelete={isOwner ? handleDelete : undefined}
+                          evidenziata={s.id === evidenzia}
                         />
                       ))}
                     </Fragment>

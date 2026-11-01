@@ -45,8 +45,8 @@ export default function UnitaMisura() {
       <div className="container">
         <h1>Unità di Misura</h1>
         <p>
-          Le unità fondamentali e derivate del Sistema Internazionale, le principali unità del sistema
-          imperiale e alcune misure storiche, con grandezza, simboli e formula dimensionale.
+          Le unità fondamentali e derivate del Sistema Internazionale, le unità del sistema imperiale e
+          le misure storiche di varie civiltà, con grandezza, simboli e formula dimensionale.
         </p>
 
         <div className="schede-toolbar">

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { NOBEL_FISICA } from '../data/nobelFisica';
 import Modal from '../components/Modal';
+import VistaToggle from '../components/VistaToggle';
 import { formattaData, estraiPaeseNascita } from '../utils/nobelUtils';
 
 function decennio(anno) {
@@ -37,6 +38,7 @@ export default function Nobel() {
   const [decennioScelto, setDecennioScelto] = useState('');
   const [nazionalitaScelta, setNazionalitaScelta] = useState('');
   const [genereScelto, setGenereScelto] = useState('');
+  const [vista, setVista] = useState('griglia');
   const [selezionato, setSelezionato] = useState(null);
 
   const decenni = useMemo(() => {
@@ -75,6 +77,10 @@ export default function Nobel() {
       (l) => l.nome,
     );
   }, [selezionato]);
+
+  const apriConTastiera = (l) => (e) => {
+    if (e.key === 'Enter' || e.key === ' ') setSelezionato(l);
+  };
 
   return (
     <div className="page">
@@ -134,11 +140,14 @@ export default function Nobel() {
               ))}
             </select>
           </div>
+          <VistaToggle vista={vista} onCambia={setVista} etichetta="Vista dei vincitori" />
         </div>
 
-        {filtrati.length === 0 ? (
+        {filtrati.length === 0 && (
           <p className="empty-state">Nessun vincitore corrisponde alla ricerca.</p>
-        ) : (
+        )}
+
+        {filtrati.length > 0 && vista === 'griglia' && (
           <div className="strumenti-grid">
             {filtrati.map((l) => (
               <article
@@ -147,9 +156,7 @@ export default function Nobel() {
                 role="button"
                 tabIndex={0}
                 onClick={() => setSelezionato(l)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') setSelezionato(l);
-                }}
+                onKeyDown={apriConTastiera(l)}
               >
                 <div className="nobel-card-foto">
                   {l.immagine ? (
@@ -170,6 +177,44 @@ export default function Nobel() {
                 <p className="nobel-motivazione">{l.motivazione}</p>
               </article>
             ))}
+          </div>
+        )}
+
+        {filtrati.length > 0 && vista === 'elenco' && (
+          <div className="unita-table-wrap etched-frame">
+            <table className="scheda-table unita-table strumenti-table">
+              <colgroup>
+                <col style={{ width: '8%' }} />
+                <col style={{ width: '26%' }} />
+                <col style={{ width: '16%' }} />
+                <col style={{ width: '50%' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">Anno</th>
+                  <th scope="col">Vincitore</th>
+                  <th scope="col">Nazionalità</th>
+                  <th scope="col">Motivazione</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtrati.map((l) => (
+                  <tr
+                    className="scheda-row unita-row"
+                    key={`${l.anno}-${l.nome}`}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelezionato(l)}
+                    onKeyDown={apriConTastiera(l)}
+                  >
+                    <td data-label="Anno">{l.anno}</td>
+                    <td className="col-titolo" data-label="Vincitore">{l.nome}</td>
+                    <td data-label="Nazionalità">{estraiPaeseNascita(l.luogoNascita) || '—'}</td>
+                    <td data-label="Motivazione">{l.motivazione}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 

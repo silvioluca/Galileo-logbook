@@ -32,6 +32,11 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/schede" onClick={() => setOpen(false)}>
+              Schede
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/storia" onClick={() => setOpen(false)}>
               Storia
             </NavLink>
@@ -56,11 +61,7 @@ export default function Navbar() {
               Unità
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/schede" onClick={() => setOpen(false)}>
-              Schede
-            </NavLink>
-          </li>
+          
         </ul>
         <div className="navbar-right">
           <div className="navbar-auth">

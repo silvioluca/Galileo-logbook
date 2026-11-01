@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconPencil } from '@tabler/icons-react';
 import { scaricaDocx, scaricaPdf, apriInOverleaf } from '../utils/exportScheda';
@@ -14,10 +14,15 @@ function etichettaModello(modello) {
   return modello;
 }
 
-export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete }) {
+export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete, evidenziata }) {
   const { titolo, modello, durataMinuti, numeroEsperienze, difficolta } = scheda;
   const fileOriginali = scheda.fileOriginali || (scheda.fileOriginale ? [scheda.fileOriginale] : []);
   const [azioneInCorso, setAzioneInCorso] = useState('');
+  const riga = useRef(null);
+
+  useEffect(() => {
+    if (evidenziata) riga.current.scrollIntoView({ block: 'center' });
+  }, [evidenziata]);
 
   const eseguiAzione = async (nome, azione) => {
     setAzioneInCorso(nome);
@@ -32,7 +37,7 @@ export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete
   };
 
   return (
-    <tr className="scheda-row">
+    <tr ref={riga} className={`scheda-row${evidenziata ? ' scheda-evidenziata' : ''}`}>
       <td className="col-titolo">{titolo}</td>
       <td className="col-modello">{etichettaModello(modello)}</td>
       <td className="col-numero-esperienze">

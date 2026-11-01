@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { subscribeAuth, signInGoogle, signOutUser } from '../services/authService';
 
-// Unico account autorizzato a creare/eliminare schede e template (vedi anche
-// le Firestore security rules, che devono usare la stessa email).
+// Unico account autorizzato a creare/eliminare schede, template e strumenti
+// (vedi anche le Firestore security rules, che devono usare la stessa email).
 const OWNER_EMAIL = 'silvio.phy@gmail.com';
 
 const AuthContext = createContext({

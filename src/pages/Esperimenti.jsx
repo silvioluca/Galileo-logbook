@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ESPERIMENTI } from '../data/esperimenti';
 import Modal from '../components/Modal';
+import VistaToggle from '../components/VistaToggle';
 
 const CATEGORIE_ORDINE = [
   'Meccanica classica',
@@ -14,6 +15,7 @@ const CATEGORIE_ORDINE = [
 export default function Esperimenti() {
   const [ricerca, setRicerca] = useState('');
   const [categoriaScelta, setCategoriaScelta] = useState('');
+  const [vista, setVista] = useState('griglia');
   const [selezionato, setSelezionato] = useState(null);
 
   const conteggioCategoria = useMemo(() => {
@@ -47,6 +49,15 @@ export default function Esperimenti() {
     return m;
   }, [filtrati]);
 
+  const ordinati = useMemo(
+    () => [...filtrati].sort((a, b) => a.nome.localeCompare(b.nome, 'it')),
+    [filtrati],
+  );
+
+  const apriConTastiera = (e) => (ev) => {
+    if (ev.key === 'Enter' || ev.key === ' ') setSelezionato(e);
+  };
+
   return (
     <div className="page">
       <div className="container">
@@ -79,11 +90,14 @@ export default function Esperimenti() {
               ))}
             </select>
           </div>
+          <VistaToggle vista={vista} onCambia={setVista} etichetta="Vista degli esperimenti" />
         </div>
 
-        {filtrati.length === 0 ? (
+        {filtrati.length === 0 && (
           <p className="empty-state">Nessun esperimento corrisponde alla ricerca.</p>
-        ) : (
+        )}
+
+        {filtrati.length > 0 && vista === 'griglia' &&
           [...gruppi.entries()]
             .filter(([, elenco]) => elenco.length > 0)
             .map(([categoria, elenco]) => (
@@ -97,9 +111,7 @@ export default function Esperimenti() {
                       role="button"
                       tabIndex={0}
                       onClick={() => setSelezionato(e)}
-                      onKeyDown={(ev) => {
-                        if (ev.key === 'Enter' || ev.key === ' ') setSelezionato(e);
-                      }}
+                      onKeyDown={apriConTastiera(e)}
                     >
                       <h3>{e.nome}</h3>
                       <p className="strumento-meta">
@@ -110,7 +122,44 @@ export default function Esperimenti() {
                   ))}
                 </div>
               </section>
-            ))
+            ))}
+
+        {filtrati.length > 0 && vista === 'elenco' && (
+          <div className="unita-table-wrap etched-frame">
+            <table className="scheda-table unita-table strumenti-table">
+              <colgroup>
+                <col style={{ width: '38%' }} />
+                <col style={{ width: '24%' }} />
+                <col style={{ width: '14%' }} />
+                <col style={{ width: '24%' }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">Esperimento</th>
+                  <th scope="col">Scienziato</th>
+                  <th scope="col">Anno</th>
+                  <th scope="col">Categoria</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ordinati.map((e) => (
+                  <tr
+                    className="scheda-row unita-row"
+                    key={e.nome}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelezionato(e)}
+                    onKeyDown={apriConTastiera(e)}
+                  >
+                    <td className="col-titolo" data-label="Esperimento">{e.nome}</td>
+                    <td data-label="Scienziato">{e.scienziato}</td>
+                    <td data-label="Anno">{e.anno}</td>
+                    <td data-label="Categoria">{e.categoria}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         <Modal
