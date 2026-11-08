@@ -1,0 +1,1 @@
+import{r as e}from"./index-CkRLM5ud.js";var t=e();function n({etichetta:e,className:n=``,children:r,...i}){return(0,t.jsx)(`button`,{type:`button`,className:`btn icona-btn ${n}`.trim(),title:e,"aria-label":e,...i,children:r})}export{n as t};
