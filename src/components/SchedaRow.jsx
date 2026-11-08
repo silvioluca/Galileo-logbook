@@ -1,21 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconPencil } from '@tabler/icons-react';
-import { scaricaDocx, scaricaPdf, apriInOverleaf } from '../utils/exportScheda';
+import { apriInOverleaf } from '../utils/apriInOverleaf';
 import { scaricaFileOriginale } from '../services/fileOriginaleService';
 
-function etichettaModello(modello) {
-  if (!modello) return '—';
-  const nome = modello.toLowerCase();
-  if (nome.includes('importat')) return 'Modello importato';
-  if (nome.includes('classico')) return 'Modello Classico';
-  if (nome.includes('compatto')) return 'Modello Compatto';
-  if (nome.includes('artistico')) return 'Modello Artistico';
-  return modello;
+// Le librerie DOCX/PDF si scaricano solo al primo clic su un'esportazione.
+async function esporta(formato, scheda) {
+  const { scaricaDocx, scaricaPdf } = await import('../utils/exportScheda');
+  return formato === 'docx' ? scaricaDocx(scheda) : scaricaPdf(scheda);
 }
 
 export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete, evidenziata }) {
-  const { titolo, modello, durataMinuti, numeroEsperienze, difficolta } = scheda;
+  const { titolo, autore, durataMinuti, numeroEsperienze, difficolta } = scheda;
   const fileOriginali = scheda.fileOriginali || (scheda.fileOriginale ? [scheda.fileOriginale] : []);
   const [azioneInCorso, setAzioneInCorso] = useState('');
   const riga = useRef(null);
@@ -39,7 +35,7 @@ export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete
   return (
     <tr ref={riga} className={`scheda-row${evidenziata ? ' scheda-evidenziata' : ''}`}>
       <td className="col-titolo">{titolo}</td>
-      <td className="col-modello">{etichettaModello(modello)}</td>
+      <td className="col-autore">{autore || '—'}</td>
       <td className="col-numero-esperienze">
         {numeroEsperienze} {numeroEsperienze === 1 ? 'esperienza' : 'esperienze'}
       </td>
@@ -64,12 +60,17 @@ export default function SchedaRow({ scheda, templateContenuto, isOwner, onDelete
           ))
         ) : (
           <>
-            <button type="button" className="scheda-export" onClick={() => scaricaDocx(scheda)}>
-              DOCX
-            </button>
-            <button type="button" className="scheda-export" onClick={() => scaricaPdf(scheda)}>
-              PDF
-            </button>
+            {['docx', 'pdf'].map((formato) => (
+              <button
+                key={formato}
+                type="button"
+                className="scheda-export"
+                disabled={azioneInCorso !== ''}
+                onClick={() => eseguiAzione(formato, () => esporta(formato, scheda))}
+              >
+                {azioneInCorso === formato ? '…' : formato.toUpperCase()}
+              </button>
+            ))}
             <button
               type="button"
               className="scheda-export"

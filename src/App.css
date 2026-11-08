@@ -891,24 +891,18 @@
   font-weight: 400;
 }
 
+/* Spazio sopra ogni branca (una cella di tabella non ha margin: si usa il padding). */
 .riga-branca th {
   border-bottom: 2px solid var(--line);
-  padding-top: 1.5rem;
+  padding-top: 2.5rem;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.4rem;
   color: var(--accent-strong);
 }
 
-.riga-branca:first-child th {
+/* Ogni branca è un tbody: solo la prima della tabella sta vicina ai filtri. */
+.scheda-table tbody:first-of-type .riga-branca th {
   padding-top: 0.5rem;
-}
-
-.riga-esperienza td {
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--ink-soft);
-  padding-top: 1.1rem;
-  padding-bottom: 0.2rem;
 }
 
 .scheda-row {
@@ -1112,8 +1106,7 @@
     padding: 0.5rem 0;
   }
 
-  .riga-branca,
-  .riga-esperienza {
+  .riga-branca {
     display: block;
   }
 
@@ -1156,14 +1149,14 @@
 /* Crea scheda form */
 .crea-scheda-layout {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 2rem;
   align-items: start;
 }
 
 @media (max-width: 900px) {
   .crea-scheda-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1174,42 +1167,184 @@
 
 .crea-scheda-preview h2 {
   font-size: 1.2rem;
+  margin: 0;
+}
+
+.anteprima-intestazione {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-.anteprima-file-pdf {
-  width: 100%;
-  height: 70vh;
-  border: 1px solid var(--line);
-  background: var(--paper);
+.anteprima-formati {
+  display: flex;
+  gap: 0.35rem;
 }
 
-.anteprima-file-docx,
+.anteprima-formati .pill-formato {
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+.anteprima-formati .pill-formato[aria-pressed='true'] {
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px currentColor;
+}
+
+/* Le pagine del file come sono: bianche su fondo grigio, ridotte alla larghezza del riquadro. */
+.anteprima-file,
 .anteprima-file-testo {
-  max-height: 70vh;
+  max-height: 75vh;
   overflow-y: auto;
-  padding: 1.5rem;
   border: 1px solid var(--line);
-  background: var(--paper);
-  font-size: 0.9rem;
-  line-height: 1.5;
+}
+
+.anteprima-file-pdf {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: #8a8a8a;
+}
+
+.anteprima-pdf-pagina {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.anteprima-file-docx {
+  overflow-x: hidden;
+  background: #8a8a8a;
+}
+
+.anteprima-file-docx .docx-wrapper {
+  padding: 8px;
+}
+
+.anteprima-file-docx .docx-wrapper > section.docx {
+  margin-bottom: 8px;
+  /* Come Word quando il documento non indica un carattere. */
+  font-family: Calibri, Carlito, 'Segoe UI', Arial, sans-serif;
+  color: #000;
 }
 
 .anteprima-file-testo {
+  margin: 0;
+  padding: 1rem;
+  background: #fff;
+  color: #1f1f1f;
   white-space: pre-wrap;
   font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
-.anteprima-file-docx table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 0.6em 0;
+/* Formato del file: stesso colore nell'elenco e nell'anteprima. */
+.pill-formato {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: var(--paper);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: var(--ink-soft);
 }
 
-.anteprima-file-docx th,
-.anteprima-file-docx td {
-  border: 1px solid var(--line);
-  padding: 0.25em 0.4em;
+.pill-pdf {
+  color: #a1281c;
+}
+
+.pill-docx {
+  color: #1f4f9c;
+}
+
+.pill-tex {
+  color: #2e6b34;
+}
+
+.pill-txt {
+  color: #5c5247;
+}
+
+.importa-scheda > label {
+  margin-bottom: 0.5rem;
+}
+
+.importa-scheda .lista-file li {
+  gap: 0.6rem;
+  padding: 0.35rem 0.4rem;
+}
+
+.importa-scheda .lista-file li.attivo {
+  background: rgba(107, 68, 35, 0.1);
+}
+
+.file-nome {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.file-nome span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-nome:hover span {
+  text-decoration: underline;
+}
+
+.importa-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0 0 0.75rem;
+  padding: 1.1rem 1rem;
+  border: 1.5px dashed var(--line);
+  border-radius: 4px;
+  color: var(--ink-soft);
+  text-align: center;
+  cursor: pointer;
+}
+
+.importa-dropzone strong {
+  color: var(--ink);
+}
+
+.importa-dropzone span {
+  font-size: 0.85rem;
+}
+
+.importa-dropzone:hover,
+.importa-dropzone.attiva {
+  border-color: var(--accent);
+  background: rgba(107, 68, 35, 0.07);
+}
+
+.importa-dropzone.occupata {
+  cursor: progress;
+  opacity: 0.7;
 }
 
 .origine-scheda {
@@ -1223,7 +1358,11 @@
 }
 
 .origine-toggle .btn {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto;
+  min-height: 2.6rem;
+  padding: 0.3rem 0.75rem;
   text-align: center;
 }
 
@@ -1291,10 +1430,6 @@
 
 .modal-body p {
   margin-top: 0;
-}
-
-.import-row {
-  margin-bottom: 0;
 }
 
 .template-row {
@@ -1549,18 +1684,16 @@
   padding: 2rem;
 }
 
+@media (max-width: 640px) {
+  .form-card {
+    padding: 1.25rem;
+  }
+}
+
 .form-actions {
   margin-top: 1.5rem;
   display: flex;
   gap: 1rem;
-}
-
-.gestione-file {
-  margin-bottom: 1rem;
-}
-
-.gestione-file > label {
-  margin-bottom: 0.5rem;
 }
 
 .lista-file {

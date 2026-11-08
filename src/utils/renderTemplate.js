@@ -15,6 +15,7 @@ export function renderTemplateLatex(contenutoTemplate, scheda) {
   const {
     titolo,
     branca,
+    autore,
     esperienza,
     modello,
     durataMinuti,
@@ -31,7 +32,9 @@ export function renderTemplateLatex(contenutoTemplate, scheda) {
   const sostituzioni = {
     '{{TITOLO}}': escapeLatex(titolo),
     '{{BRANCA}}': escapeLatex(branca),
-    '{{ESPERIENZA}}': escapeLatex(esperienza),
+    '{{AUTORE}}': escapeLatex(autore),
+    // Template salvati prima del campo autore: al posto dell'esperienza, non più richiesta.
+    '{{ESPERIENZA}}': escapeLatex(esperienza || autore),
     '{{MODELLO}}': escapeLatex(modello),
     '{{DURATA}}': String(durataMinuti ?? ''),
     '{{NUMERO_ESPERIENZE}}': String(numeroEsperienze ?? ''),

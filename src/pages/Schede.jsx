@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getSchede, deleteScheda } from '../services/schedeService';
 import { getTemplates } from '../services/templatesService';
@@ -27,15 +27,13 @@ function rientraNellaDurata(durataMinuti, bucket) {
   }
 }
 
-function raggruppaPerBrancaEEsperienza(schede) {
+function raggruppaPerBranca(schede) {
   const perBranca = new Map();
-  for (const branca of BRANCHE) perBranca.set(branca, new Map());
+  for (const branca of BRANCHE) perBranca.set(branca, []);
 
   for (const s of schede) {
-    if (!perBranca.has(s.branca)) perBranca.set(s.branca, new Map());
-    const perEsperienza = perBranca.get(s.branca);
-    if (!perEsperienza.has(s.esperienza)) perEsperienza.set(s.esperienza, []);
-    perEsperienza.get(s.esperienza).push(s);
+    if (!perBranca.has(s.branca)) perBranca.set(s.branca, []);
+    perBranca.get(s.branca).push(s);
   }
 
   return perBranca;
@@ -85,7 +83,7 @@ export default function Schede() {
     });
   }, [schede, filtri]);
 
-  const gruppi = useMemo(() => raggruppaPerBrancaEEsperienza(schedeFiltrate), [schedeFiltrate]);
+  const gruppi = useMemo(() => raggruppaPerBranca(schedeFiltrate), [schedeFiltrate]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Eliminare questa scheda? L\'operazione non è reversibile.')) return;
@@ -131,28 +129,21 @@ export default function Schede() {
               <col style={{ width: '26%' }} />
             </colgroup>
             {[...gruppi.entries()]
-              .filter(([, perEsperienza]) => perEsperienza.size > 0)
-              .map(([branca, perEsperienza]) => (
+              .filter(([, schedeBranca]) => schedeBranca.length > 0)
+              .map(([branca, schedeBranca]) => (
                 <tbody key={branca}>
                   <tr className="riga-branca">
                     <th colSpan={6}>{branca}</th>
                   </tr>
-                  {[...perEsperienza.entries()].map(([esperienza, schedeEsperienza]) => (
-                    <Fragment key={esperienza}>
-                      <tr className="riga-esperienza">
-                        <td colSpan={6}>{esperienza}</td>
-                      </tr>
-                      {schedeEsperienza.map((s) => (
-                        <SchedaRow
-                          key={s.id}
-                          scheda={s}
-                          templateContenuto={contenutoTemplatePer(s)}
-                          isOwner={isOwner}
-                          onDelete={isOwner ? handleDelete : undefined}
-                          evidenziata={s.id === evidenzia}
-                        />
-                      ))}
-                    </Fragment>
+                  {schedeBranca.map((s) => (
+                    <SchedaRow
+                      key={s.id}
+                      scheda={s}
+                      templateContenuto={contenutoTemplatePer(s)}
+                      isOwner={isOwner}
+                      onDelete={isOwner ? handleDelete : undefined}
+                      evidenziata={s.id === evidenzia}
+                    />
                   ))}
                 </tbody>
               ))}

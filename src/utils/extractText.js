@@ -4,6 +4,9 @@ import mammoth from 'mammoth';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
+// Con il worker già configurato: serve anche all'anteprima dei PDF.
+export { pdfjsLib };
+
 async function estraiDaPdf(file) {
   const buffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
@@ -25,7 +28,7 @@ async function estraiDaDocx(file) {
   return risultato.value;
 }
 
-const ESTENSIONI_SUPPORTATE = ['tex', 'txt', 'pdf', 'docx'];
+export const ESTENSIONI_SUPPORTATE = ['tex', 'txt', 'pdf', 'docx'];
 
 export function estensioneSupportata(estensione) {
   return ESTENSIONI_SUPPORTATE.includes(estensione);

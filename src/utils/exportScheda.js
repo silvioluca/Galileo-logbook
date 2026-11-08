@@ -1,6 +1,5 @@
 import { Document, Packer, Paragraph, HeadingLevel, TextRun, AlignmentType, BorderStyle } from 'docx';
 import { jsPDF } from 'jspdf';
-import { renderTemplateLatex } from './renderTemplate';
 import { determinaSkin } from './templateSkin';
 import { convertiHtmlInDocx } from './htmlToDocx';
 import { disegnaHtmlInPdf } from './htmlToPdf';
@@ -31,8 +30,10 @@ function scaricaBlob(blob, nome) {
 }
 
 function metaTesto(scheda) {
-  const { branca, esperienza, modello, durataMinuti, numeroEsperienze, difficolta } = scheda;
-  return `${branca || ''} · ${esperienza || ''} · ${modello || ''} · ${durataMinuti || 0} min · ${numeroEsperienze || 0} esperienze · Difficoltà: ${difficolta || ''}`;
+  const { branca, autore, modello, durataMinuti, numeroEsperienze, difficolta } = scheda;
+  return [branca, autore, modello, `${durataMinuti || 0} min`, `${numeroEsperienze || 0} esperienze`, `Difficoltà: ${difficolta || ''}`]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 // ---------- DOCX ----------
@@ -286,27 +287,3 @@ export async function scaricaPdf(scheda) {
   doc.save(nomeFile(scheda, 'pdf'));
 }
 
-// ---------- LaTeX / Overleaf ----------
-
-// Apre Overleaf con il sorgente LaTeX pre-caricato (POST "snip", il meccanismo
-// ufficiale di Overleaf per aprire contenuto generato al volo senza doverlo
-// ospitare su un URL pubblico).
-export function apriInOverleaf(scheda, contenutoTemplate) {
-  const testoLatex = renderTemplateLatex(contenutoTemplate, scheda);
-
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://www.overleaf.com/docs';
-  form.target = '_blank';
-  form.style.display = 'none';
-
-  const campo = document.createElement('input');
-  campo.type = 'hidden';
-  campo.name = 'snip';
-  campo.value = testoLatex;
-  form.appendChild(campo);
-
-  document.body.appendChild(form);
-  form.submit();
-  form.remove();
-}

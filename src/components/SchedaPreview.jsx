@@ -8,7 +8,7 @@ export default function SchedaPreview({ scheda }) {
   const {
     titolo,
     branca,
-    esperienza,
+    autore,
     modello,
     scopo,
     strumenti = [],
@@ -20,8 +20,8 @@ export default function SchedaPreview({ scheda }) {
 
   const skin = determinaSkin(modello);
   const titoloVisibile = titolo || 'Titolo della scheda';
-  const esperienzaVisibile = esperienza || 'Nome esperienza';
-  const meta = `${branca} · ${esperienzaVisibile} · ${durataMinuti} min · ${numeroEsperienze} esperienze · ${difficolta}`;
+  const unisci = (...parti) => parti.filter(Boolean).join(' · ');
+  const meta = unisci(branca, autore, `${durataMinuti} min`, `${numeroEsperienze} esperienze`, difficolta);
 
   if (skin === 'compatto') {
     return (
@@ -31,8 +31,7 @@ export default function SchedaPreview({ scheda }) {
           <span className="preview-difficolta">{difficolta}</span>
         </div>
         <p className="preview-meta-piccola">
-          {branca} · {esperienzaVisibile} · {modello || '—'} · {durataMinuti} min ·{' '}
-          {numeroEsperienze} esperienze
+          {unisci(branca, autore, modello, `${durataMinuti} min`, `${numeroEsperienze} esperienze`)}
         </p>
         <hr />
         <p>
@@ -58,7 +57,7 @@ export default function SchedaPreview({ scheda }) {
           <h2>{titoloVisibile}</h2>
           <div className="preview-rule" />
           <p className="preview-meta-artistico">
-            {branca} · {esperienzaVisibile} · {modello || '—'}
+            {unisci(branca, autore, modello)}
           </p>
           <p className="preview-meta-artistico">
             {durataMinuti} min · {numeroEsperienze} esperienze · Difficoltà: {difficolta}
