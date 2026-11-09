@@ -4,8 +4,9 @@ export const BRANCHE = [
   'Termologia',
   'Acustica',
   'Ottica',
-  'Elettromagnetismo',
   'Fluidodinamica',
+  'Elettromagnetismo',
+  'Fisica moderna',
 ];
 
 // Macroargomenti in più usati solo dagli inventari degli strumenti: non sono
